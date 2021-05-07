@@ -1,7 +1,8 @@
 /*
  * CAPITULO II: PUERTOS DIGITALES
  * CÓDIGO 1: Manejo de puertos configurados como salidas
- * OBJETIVO: Encender y Apagar leds mediante el uso de diferentes tipos de variables 
+  * OBJETIVO: Realizar el codigo necesario para encender 4 leds de forma síncrona, es decir, 
+ * encender uno por uno. Cada vez que se encienda un led los demás deben estar apagados
  */
 
 //variables : numericas enteras(int), decimales(float), caracteres(chart)
