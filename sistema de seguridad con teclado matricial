@@ -1,0 +1,214 @@
+/*
+  Universidad Técnica del Norte
+  Facultad de Ingenieria en Ciencias Aplicadas
+  CITEL
+  Benavides Daniel
+  Control de Acceso con contraseña
+*/
+
+#include <LiquidCrystal.h>
+#include <Keypad.h>
+
+String nombre1="Ariel Davalos";//12
+String nombre2="Damian Cervantes";
+String nombre3="Carlos Benavides";
+String nombre4= "Daniel Benavides";
+String pass1= "ad102344";
+String pass2= "dc774235";
+String pass3= "ca543187";
+String pass4= "db280496";
+String CX;//Guardamos la Informacion que se ingresa
+int ingreso1=0;
+int ingreso2=0;
+int ingreso3=0;
+int ingreso4=0;
+// Configuracion teclado matricial 
+const byte ROWS =4;
+const byte COLS =4;
+char keys [ROWS][COLS]={      //define la matriz configuracion del teclado matricial
+  {'1','2','3', 'a'},
+  {'4','5','6', 'b'},
+  {'7','8','9', 'c'},
+  {'*','0','#', 'd'}
+};
+byte rowPins[ROWS]={10,9,8,7};  //asigna los pines para las filas
+byte colPins[COLS]={13,12,11,6}; //asigna los pines a laas columnas
+char Password[8];                //asigna el numero de caracteres de una clave
+int dir = 0;                     // contador para los caracteres de la clave
+Keypad keypad = Keypad(makeKeymap(keys),rowPins, colPins, ROWS,COLS ); // definimos las caracteristicas del objeto para el teclado
+//Configuracion de LCD
+const int rs = A0, en = A1, d4 = A2, d5 = A3, d6 = A4, d7 = A5;
+LiquidCrystal lcd(rs, en, d4, d5, d6, d7);
+void setup() {
+   pinMode(3, OUTPUT);      // pin 3 asigando como salida
+   lcd.begin(16, 2);        // declara 16 columnas y 2 filas
+   Serial.begin(9600);      // velocidad de trasnmision para comunicación serial
+   pinMode(2,INPUT);        //BOTON DE ENTRADA
+   lcd.setCursor(0, 0);     // ubicacion del cursor
+   lcd.print("Clave de acceso");  // imprimimos un mensaje
+   lcd.setCursor(0, 1);           // ubicacion del cursor
+}
+
+void loop(){
+  
+  if(Serial.available()>0){// detecta si ingresa datos en comunicacion serial
+  CX=Serial.readString();// va ir guardando los datos
+  if(CX==pass1){
+     lcd.print(CX);
+     delay(350);// detiene el tiempo del microcontrolador 
+     lcd.clear(); // limpia toda la LCD
+    for(int j=0;j<2;j++){
+   for(int i=-12;i<16;i++){
+   lcd.setCursor(i,0);// define fila y columna en la que se desea escribir
+ lcd.print(" Bienvenido "); // imprime el mensaje 
+ lcd.setCursor(i,1); // se define fila 2
+ lcd.print(nombre1);
+ delay(100);// detiene el tiempo del microcontrolador 
+ lcd.clear(); // limpia toda la LCD
+} }
+ingreso1=1;
+ lcd.clear();
+  lcd.setCursor(0,0);
+  lcd.print("Clave de acceso");
+}
+else if(CX==pass2){
+     lcd.print(CX);
+     delay(300);// detiene el tiempo del microcontrolador 
+     lcd.clear(); // limpia toda la LCD
+  for(int j=0;j<2;j++){
+  for(int i=-12;i<16;i++){
+   lcd.setCursor(i,0);// define fila y columna en la que se desea escribir
+ lcd.print(" Bienvenido "); // imprime el mensaje 
+ lcd.setCursor(i,1); // se define fila 2
+ lcd.print(nombre2);
+ delay(100);// detiene el tiempo del microcontrolador 
+ lcd.clear(); // limpia toda la LCD
+  }}
+  ingreso2=1;
+   lcd.clear();
+  lcd.setCursor(0,0);
+  lcd.print("Clave de acceso");}
+  else if(CX==pass3){
+     lcd.print(CX);
+     delay(300);// detiene el tiempo del microcontrolador 
+     lcd.clear(); // limpia toda la LCD
+    for(int j=0;j<2;j++){
+  for(int i=-12;i<16;i++){
+   lcd.setCursor(i,0);// define fila y columna en la que se desea escribir
+ lcd.print(" Bienvenido "); // imprime el mensaje 
+ lcd.setCursor(i,1); // se define fila 2
+ lcd.print(nombre3);
+ delay(100);// detiene el tiempo del microcontrolador 
+ lcd.clear(); // limpia toda la LCD
+  }}
+  ingreso3=1;
+   lcd.clear();
+  lcd.setCursor(0,0);
+  lcd.print("Clave de acceso");}
+  else if(CX==pass4){
+    for(int j=0;j<2;j++){
+   for(int i=-12;i<16;i++){
+ lcd.clear(); // limpia toda la LCD
+ 
+} }
+ lcd.clear();
+  lcd.setCursor(0,0);
+  lcd.print("Clave de acceso");
+}
+  
+else{
+  lcd.clear();
+  lcd.setCursor(0,0);
+  lcd.print("Clave invalida");
+  delay(600);
+  lcd.clear();
+  lcd.setCursor(0,0);
+  lcd.print("Clave de acceso");
+  
+}
+Serial.println("");// hace un salto cada vez se escribe algo 
+
+  } 
+  
+  char key = keypad.getKey();
+  if (key){
+    Password[dir]=key;
+    lcd.print(key);
+    dir = dir +1; 
+
+    if(dir==8)
+    {
+      if(Password[0]== 'd' && Password[1]=='b' && Password[2]== '2' && Password[3]=='8'&& Password[4]== '0' && Password[5]=='4'&& Password[6]== '9' && Password[7]=='6' )
+      {
+        lcd.setCursor(0, 0);
+        lcd.print("Acceso correcto         ");
+        digitalWrite(3,HIGH);
+        delay(200);
+        for(int i=16;i>=1;i--){
+        lcd.clear();
+        lcd.setCursor(i,0);
+        lcd.print("Bienvenido");
+        lcd.setCursor(i-5,1);
+        lcd.print("Daniel Benavides");
+        delay(100);
+        ingreso4=1;
+        }
+   
+        digitalWrite(3,LOW);
+        lcd.clear();
+        lcd.setCursor(0, 0);
+        lcd.print("Clave de acceso");
+        dir=0;
+        
+      }
+      else 
+      { 
+        lcd.setCursor(0, 0);
+        lcd.print("Acceso denegado        ");
+        delay(2000);
+        lcd.clear();
+        lcd.setCursor(0, 0);
+        lcd.print("Clave de acceso");
+        dir=0;
+      }
+      lcd.setCursor(0, 1);
+    }
+  }
+  if(digitalRead(2)==HIGH){
+    Serial.println("");
+    Serial.print(nombre1);
+    if(ingreso1==1){
+      
+    Serial.println(" PRESENTE ");
+    }
+    else{
+      Serial.println(" AUSENTE ");
+    }
+    Serial.print(nombre2);
+    if(ingreso2==1){
+      
+    Serial.println(" PRESENTE ");
+    }
+    else{
+      Serial.println(" AUSENTE ");
+    }
+    Serial.print(nombre3);
+    if(ingreso3==1){
+      
+    Serial.println(" PRESENTE ");
+    }
+    else{
+      Serial.println(" AUSENTE ");
+    }
+     Serial.print(nombre4);
+    if(ingreso4==1){
+      
+    Serial.println(" PRESENTE ");
+    }
+    else{
+      Serial.println(" AUSENTE ");
+    }
+    Serial.println("");
+    delay(300);
+    }
+}
