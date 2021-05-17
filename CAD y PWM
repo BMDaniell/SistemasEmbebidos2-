@@ -1,0 +1,85 @@
+/*
+ * CAPÍTULO IV: PERIFÉRICOS ESPECIALES
+ * DEBER 4.1: CAD Y PWM
+ * OBJETIVO:  Realizar un sistema en el cual se conecten 2 motores (parecido al diagrama que se utilizo en clase). Los datos de CAD, V y PWM 
+ *            se deben visulizar en una LCD para cada motor.   A travez de la activación de un botón y un switch (el funcionamiento de un motor 
+ *            dependerá de la activación de un botón y el otro dependerá de la activación de un switch, a su         
+ *            elección) entrará en funcionamiento el motor que corresponda y se visualizará en la LCD de ese motor los datos de CAD, Voltaje y PWM.
+ * Nombre: Daniel Benavides          
+ * FUNCIONES:         analogRead(conversor)
+ *                        conversor-> A0-A5
+ *                     analogWrite(pin, dutty)                    
+ *                        pin-> pines con ~ , dutty->0-255
+ *                 
+ */
+
+ #include<LiquidCrystal.h>
+
+LiquidCrystal lcd(13, 12, 5, 4, 3, 2);      // selección de pines para LCD
+int conversor;                                // variable para adquidir datos del conversor entre 0-1023
+float voltaje;                                // variable de conversión de conversor a voltaje
+int dutty;                                    // variable para uso de pwm
+int conversor2;                                // variable para adquidir datos del conversor entre 0-1023
+float voltaje2;                                // variable de conversión de conversor a voltaje
+int dutty2;                                    // variable para uso de pwm
+int btn=7;                                 // pin 7 conectado como entrada
+int sw=6;                                  // pin 7 conectado como entrada
+void setup() {
+  lcd.begin(16, 2);                           // inicializa la LCD
+  pinMode(btn,INPUT);                         // pin 7 declarado como entrada
+  pinMode(sw,INPUT);                          // pin 6 declarado como entrada
+  
+}
+
+void loop(){
+  if(digitalRead(btn)==LOW){
+    lcd.setCursor(1,0);
+    lcd.print("Motor 1");
+    delay(500);
+    lcd.clear();
+  conversor=analogRead(0);          //lectura de canal 0
+  voltaje=(conversor*5.0)/1023.0;    // conversión a voltaje 
+  dutty=conversor/4;                 // cambio de escala para dutty cicle
+  analogWrite(11,dutty);              // envío de valor a pin 11
+  lcd.setCursor(0,0);                // selección de ubicación en LCD
+  lcd.print("CAD:");                // Impresión de datos en LCD
+  lcd.setCursor(5,0);            // selección de ubicación en LCD
+  lcd.print(conversor);             // Impresión de datos en LCD
+  lcd.setCursor(0,1);                // selección de ubicación en LCD
+  lcd.print("V:");                       // Impresión de datos en LCD
+  lcd.setCursor(3,1);                // selección de ubicación en LCD
+  lcd.print(voltaje);            // Impresión de datos en LCD
+  lcd.setCursor(9,1);               // selección de ubicación en LCD
+  lcd.print("PWM:");               // Impresión de datos en LCD
+  lcd.setCursor(13,1);              // selección de ubicación en LCD
+  lcd.print((dutty*100)/255);           // Impresión de datos en LCD
+  delay(500);                        // tiempo de espera para siguiente lectura
+  lcd.clear();                        // borrar LCD
+  }
+  else if (digitalRead(sw)==LOW){
+    lcd.setCursor(1,0);
+    lcd.print("Motor 2");
+    delay(500);
+    lcd.clear();
+    conversor2=analogRead(1);          //lectura de canal 0
+    voltaje2=(conversor2*5.0)/1023.0;    // conversión a voltaje 
+    dutty2=conversor2/4;                 // cambio de escala para dutty cicle
+    analogWrite(10,dutty2);              // envío de valor a pin 11
+    lcd.setCursor(0,0);                // selección de ubicación en LCD
+    lcd.print("CAD:");                // Impresión de datos en LCD
+    lcd.setCursor(5,0);            // selección de ubicación en LCD
+    lcd.print(conversor2);             // Impresión de datos en LCD
+    lcd.setCursor(0,1);                // selección de ubicación en LCD
+    lcd.print("V:");                       // Impresión de datos en LCD
+    lcd.setCursor(3,1);                // selección de ubicación en LCD
+    lcd.print(voltaje2);            // Impresión de datos en LCD
+    lcd.setCursor(9,1);               // selección de ubicación en LCD
+    lcd.print("PWM:");               // Impresión de datos en LCD
+    lcd.setCursor(13,1);              // selección de ubicación en LCD
+    lcd.print((dutty2*100)/255);           // Impresión de datos en LCD
+    delay(500);                        // tiempo de espera para siguiente lectura
+    lcd.clear(); 
+    }
+   
+  
+}
