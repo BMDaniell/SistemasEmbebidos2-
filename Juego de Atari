@@ -1,0 +1,95 @@
+////////////// Programacion en Arduino///////////////////////////
+
+/* Universidad Técnica del Norte
+ *  FICA-CITEL
+ *  Sistemas Embebidos
+ *  Beanvides Daniel
+ */
+const int button1=2;
+const int button2=3;
+void setup() {
+  // put your setup code here, to run once:
+Serial.begin(9600);
+pinMode(button1,INPUT);
+pinMode(button2,INPUT);
+}
+
+void loop() {
+  // ponga su código principal aquí, para que se ejecute repetidamente:
+if(digitalRead(button1)==HIGH){
+  Serial.println("1");
+  delay(20);
+}
+if (digitalRead(button2)==HIGH){
+  Serial.println("2");
+  delay(20);
+}
+if(digitalRead(button1)==LOW && digitalRead(button2)==LOW){
+  Serial.println("9");
+  delay(20);
+}
+}
+///////////////////////// Programacion en Processing ////////////
+
+import processing.serial.*;//
+Serial MyPort;
+
+int x=100;
+int y=100;
+int vx=3;
+int vy=3;
+int RelativePositionX;
+String val="";
+float value;
+int xb;
+
+void setup(){
+size(600,450);
+MyPort=new Serial(this, "COM10",9600);
+}
+void draw(){
+// Comunicación
+if(MyPort.available()>0){
+  val=MyPort.readStringUntil('\n');
+   if(val==null){
+    return;
+         }
+    value=float(val);
+     }
+     if(value==1){
+     RelativePositionX-=10;
+     }
+     else if(value==2){
+     // DE
+     RelativePositionX+=10;
+     }
+     
+      background(99,99,99);// color paleta
+      xb=200+RelativePositionX;
+      fill(20,150,190);
+      rect(xb,420,180,30);
+      fill(51,204,255);// color bolita
+      ellipse(x,y,40,40);
+      x+=vx;
+      if(x>580||x<20 ){
+      vx=vx*-1;
+      }
+      y+=vy;
+      if (y> height || y<0){
+      vy=vy*-1;
+    }
+    if(y>=410 &&(x<xb+180)&&(x>xb)){
+    vy=-(vy+2);
+    vx+=1;
+    }
+    if(y>=450){
+    x=100;
+    y=100;
+    vx=3;
+    vy=3;
+    }
+}
+void End(){
+clear();
+text("Fin del juego",150,200);
+}
