@@ -1,0 +1,73 @@
+/*
+ * CAPÍTULO 5: FUNCIONES ESPECÍFICAS
+ * DEBER 5.4 : Semaforo con RTOS 
+ * OBJETIVO: Realizar el funcionamiento de un semáforo basados en las funciones y tareas de RTOS
+ *NOMBRE: Benavides Daniel
+ */
+ 
+#include <Arduino_FreeRTOS.h> // librería de RTOS
+// LEDS EN ARDUINO PARA SIMULACIÓN DE PROCESOS
+ 
+#define GREEN 8
+#define ORANGE 7
+#define RED 6
+//objeto del gestor tareas
+typedef int TaskProfiler;
+//definir las tareas
+TaskProfiler greenLEDProfiler;
+TaskProfiler orangeLEDProfiler;
+TaskProfiler redLEDProfiler;
+void setup() {
+Serial.begin(9600);
+Serial.println("SEMAFORO ENCENDIDO ");
+//crear las rutinas de cada tarea
+xTaskCreate(greenLedControllerTask,"Green LED Task",100,NULL,1,NULL); //rutina,nombre,memoria,NULL,prioridad,NULL
+xTaskCreate(orangeLedControllerTask,"Orange LED Task",100,NULL,2,NULL); //rutina,nombre,memoria,NULL,prioridad,NULL
+xTaskCreate(redLedControllerTask,"Red LED Task",100,NULL,3,NULL); //rutina,nombre,memoria,NULL,prioridad,NULL
+vTaskStartScheduler ();
+}
+void greenLedControllerTask(void *pvParameters){//tarea 1
+  pinMode(GREEN,OUTPUT);
+  while(1){
+      greenLEDProfiler++;
+      Serial.println("Verde encendido");
+      Serial.println("Naranja apagado");
+      Serial.println("Rojo apagado");
+      digitalWrite(GREEN,HIGH);
+      digitalWrite(ORANGE,LOW);
+      digitalWrite(RED,LOW);
+      vTaskDelay(600);
+    }
+    
+}
+void orangeLedControllerTask (void *pvParameters){
+ pinMode(ORANGE,OUTPUT);
+  while(1){
+      orangeLEDProfiler++;
+      Serial.println("Verde apagado");
+      Serial.println("Naranja encendido");
+      Serial.println("Rojo apagado");
+      digitalWrite(ORANGE,HIGH);
+      digitalWrite(GREEN,LOW);
+      digitalWrite(RED,LOW);
+      vTaskDelay(300);
+      
+    } 
+    
+ }
+void redLedControllerTask (void *pvParameters){
+ pinMode(RED,OUTPUT);
+ while(1){
+      redLEDProfiler++;
+      Serial.println("Verde apagado");
+      Serial.println("Naranja apagado");
+      Serial.println("Rojo encendido");
+      digitalWrite(RED,HIGH);
+      digitalWrite(GREEN,LOW);
+      digitalWrite(ORANGE,LOW);
+     vTaskDelay(600);
+  } 
+ 
+ }
+void loop() {
+}
